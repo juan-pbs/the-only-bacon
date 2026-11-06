@@ -1,0 +1,318 @@
+{
+  "frame_size": 320,
+  "directions": [
+    "down",
+    "up",
+    "left",
+    "right"
+  ],
+  "animations": {
+    "idle_down": {
+      "file": "tiras/idle_down.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true
+    },
+    "idle_up": {
+      "file": "tiras/idle_up.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true
+    },
+    "idle_left": {
+      "file": "tiras/idle_left.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true
+    },
+    "idle_right": {
+      "file": "tiras/idle_right.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true
+    },
+    "walk_down": {
+      "file": "tiras/walk_down.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "walk_up": {
+      "file": "tiras/walk_up.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "walk_left": {
+      "file": "tiras/walk_left.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "walk_right": {
+      "file": "tiras/walk_right.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "run_down": {
+      "file": "tiras/run_down.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": true
+    },
+    "run_up": {
+      "file": "tiras/run_up.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": true
+    },
+    "run_left": {
+      "file": "tiras/run_left.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": true
+    },
+    "run_right": {
+      "file": "tiras/run_right.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": true
+    },
+    "jump_down": {
+      "file": "tiras/jump_down.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "jump_up": {
+      "file": "tiras/jump_up.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "jump_left": {
+      "file": "tiras/jump_left.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "jump_right": {
+      "file": "tiras/jump_right.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "dodge_down": {
+      "file": "tiras/dodge_down.png",
+      "frames": 4,
+      "fps": 14,
+      "loop": false
+    },
+    "dodge_up": {
+      "file": "tiras/dodge_up.png",
+      "frames": 4,
+      "fps": 14,
+      "loop": false
+    },
+    "dodge_left": {
+      "file": "tiras/dodge_left.png",
+      "frames": 4,
+      "fps": 14,
+      "loop": false
+    },
+    "dodge_right": {
+      "file": "tiras/dodge_right.png",
+      "frames": 4,
+      "fps": 14,
+      "loop": false
+    },
+    "pickup_down": {
+      "file": "tiras/pickup_down.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "pickup_up": {
+      "file": "tiras/pickup_up.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "pickup_left": {
+      "file": "tiras/pickup_left.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "pickup_right": {
+      "file": "tiras/pickup_right.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "throw_down": {
+      "file": "tiras/throw_down.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": false
+    },
+    "throw_up": {
+      "file": "tiras/throw_up.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": false
+    },
+    "throw_left": {
+      "file": "tiras/throw_left.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": false
+    },
+    "throw_right": {
+      "file": "tiras/throw_right.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": false
+    },
+    "hurt_down": {
+      "file": "tiras/hurt_down.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "hurt_up": {
+      "file": "tiras/hurt_up.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "hurt_left": {
+      "file": "tiras/hurt_left.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "hurt_right": {
+      "file": "tiras/hurt_right.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false
+    },
+    "hide_down": {
+      "file": "tiras/hide_down.png",
+      "frames": 4,
+      "fps": 9,
+      "loop": false
+    },
+    "hide_up": {
+      "file": "tiras/hide_up.png",
+      "frames": 4,
+      "fps": 9,
+      "loop": false
+    },
+    "hide_left": {
+      "file": "tiras/hide_left.png",
+      "frames": 4,
+      "fps": 9,
+      "loop": false
+    },
+    "hide_right": {
+      "file": "tiras/hide_right.png",
+      "frames": 4,
+      "fps": 9,
+      "loop": false
+    },
+    "hold_idle_down": {
+      "file": "tiras/hold_idle_down.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true
+    },
+    "hold_idle_up": {
+      "file": "tiras/hold_idle_up.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true
+    },
+    "hold_idle_left": {
+      "file": "tiras/hold_idle_left.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true
+    },
+    "hold_idle_right": {
+      "file": "tiras/hold_idle_right.png",
+      "frames": 2,
+      "fps": 3,
+      "loop": true
+    },
+    "hold_walk_down": {
+      "file": "tiras/hold_walk_down.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "hold_walk_up": {
+      "file": "tiras/hold_walk_up.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "hold_walk_left": {
+      "file": "tiras/hold_walk_left.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "hold_walk_right": {
+      "file": "tiras/hold_walk_right.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "hold_run_down": {
+      "file": "tiras/hold_run_down.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": true
+    },
+    "hold_run_up": {
+      "file": "tiras/hold_run_up.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": true
+    },
+    "hold_run_left": {
+      "file": "tiras/hold_run_left.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": true
+    },
+    "hold_run_right": {
+      "file": "tiras/hold_run_right.png",
+      "frames": 4,
+      "fps": 12,
+      "loop": true
+    },
+    "victory": {
+      "file": "tiras/victory.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": false
+    },
+    "defeat": {
+      "file": "tiras/defeat.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": false
+    },
+    "can_spin": {
+      "file": "tiras/can_spin.png",
+      "frames": 4,
+      "frame_size": 160,
+      "fps": 12,
+      "loop": true
+    }
+  }
+}
