@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://clq6uw0fn1rqc"]
+
+[node name="nivel_1" type="Node2D" unique_id=565742836]
+
+[node name="tocino" type="CharacterBody2D" parent="." unique_id=598403251]
+
+[node name="Sprite2D" type="Sprite2D" parent="tocino" unique_id=1923547977]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="tocino" unique_id=626654990]
+root_node = NodePath("../..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="tocino" unique_id=1289331710]
+
+[node name="Camera2D" type="Camera2D" parent="tocino/CollisionShape2D" unique_id=567313717]
