@@ -3,8 +3,11 @@ extends Node2D
 const TILE_SIZE := 102.0
 const FLOOR_ATLAS := preload("res://assets/sprites/pisos-niveles.png")
 const PROP_ATLAS := preload("res://assets/sprites/objetos-escenario.png")
+const EXPLORATION_FOG := preload("res://shaders/exploration_fog.gdshader")
 const TLACUA_SCENE := preload("res://tlacua.tscn")
 const CUACHE_SCENE := preload("res://cuache_enemigo.tscn")
+const FOG_PIXEL_SIZE := 16.0
+const FOG_REVEAL_RADIUS := 310.0
 const TILE_EDGES := [0, 105, 209, 314, 418, 523, 627]
 const REGIONS := {
 	"crate": Rect2(45, 80, 350, 370),
@@ -30,6 +33,10 @@ var finished := false
 var paused := false
 var won := false
 var enemies: Array[CharacterBody2D] = []
+var fog_overlay: ColorRect
+var fog_image: Image
+var fog_texture: ImageTexture
+var last_reveal_position := Vector2.INF
 
 @onready var player: CharacterBody2D = $Tocino
 @onready var timer_label: Label = $HUD/Barra/Fila/Tiempo
@@ -55,6 +62,8 @@ func _ready() -> void:
 	_build_boundaries(width, height)
 	_build_layout()
 	_build_enemies()
+	if level_number == 2:
+		_setup_exploration_fog(Vector2(width, height))
 	player.health_changed.connect(_update_health)
 	player.defeated.connect(func() -> void: _finish(false, "¡Te atraparon!"))
 	$Salida.body_entered.connect(_on_exit_entered)
@@ -73,10 +82,51 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if paused or finished:
 		return
+	if fog_overlay != null:
+		_update_exploration_fog()
 	remaining = maxf(0.0, remaining - delta)
 	timer_label.text = "Tiempo: %d" % ceili(remaining)
 	if remaining <= 0.0:
 		_finish(false, "Se acabó el tiempo")
+
+
+func _setup_exploration_fog(world_size: Vector2) -> void:
+	fog_image = Image.create(ceili(world_size.x / FOG_PIXEL_SIZE), ceili(world_size.y / FOG_PIXEL_SIZE), false, Image.FORMAT_R8)
+	fog_image.fill(Color.BLACK)
+	fog_texture = ImageTexture.create_from_image(fog_image)
+	fog_overlay = ColorRect.new()
+	fog_overlay.name = "OscuridadExplorable"
+	fog_overlay.size = world_size
+	fog_overlay.z_index = 100
+	fog_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var material := ShaderMaterial.new()
+	material.shader = EXPLORATION_FOG
+	material.set_shader_parameter("explored_map", fog_texture)
+	material.set_shader_parameter("world_size", world_size)
+	fog_overlay.material = material
+	add_child(fog_overlay)
+	_update_exploration_fog()
+
+
+func _update_exploration_fog() -> void:
+	fog_overlay.material.set_shader_parameter("explorer_position", player.global_position)
+	if player.global_position.distance_to(last_reveal_position) < FOG_PIXEL_SIZE:
+		return
+	last_reveal_position = player.global_position
+	var first_x := maxi(0, floori((player.global_position.x - FOG_REVEAL_RADIUS) / FOG_PIXEL_SIZE))
+	var last_x := mini(fog_image.get_width() - 1, ceili((player.global_position.x + FOG_REVEAL_RADIUS) / FOG_PIXEL_SIZE))
+	var first_y := maxi(0, floori((player.global_position.y - FOG_REVEAL_RADIUS) / FOG_PIXEL_SIZE))
+	var last_y := mini(fog_image.get_height() - 1, ceili((player.global_position.y + FOG_REVEAL_RADIUS) / FOG_PIXEL_SIZE))
+	for map_y in range(first_y, last_y + 1):
+		for map_x in range(first_x, last_x + 1):
+			var map_position := Vector2(map_x + 0.5, map_y + 0.5) * FOG_PIXEL_SIZE
+			var distance := map_position.distance_to(player.global_position)
+			if distance > FOG_REVEAL_RADIUS:
+				continue
+			var reveal := 1.0 - smoothstep(FOG_REVEAL_RADIUS * 0.72, FOG_REVEAL_RADIUS, distance)
+			if reveal > fog_image.get_pixel(map_x, map_y).r:
+				fog_image.set_pixel(map_x, map_y, Color(reveal, 0.0, 0.0))
+	fog_texture.update(fog_image)
 
 
 func _unhandled_input(event: InputEvent) -> void:
