@@ -1,14 +1,160 @@
-[gd_scene format=3 uid="uid://clq6uw0fn1rqc"]
+[gd_scene load_steps=5 format=3]
 
-[node name="nivel_1" type="Node2D" unique_id=565742836]
+[ext_resource type="Script" path="res://scripts/nivel_1.gd" id="1"]
+[ext_resource type="PackedScene" path="res://cuache.tscn" id="3"]
 
-[node name="tocino" type="CharacterBody2D" parent="." unique_id=598403251]
+[sub_resource type="StyleBoxFlat" id="pause_style"]
+bg_color = Color(0.29, 0.16, 0.08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.94, 0.67, 0.3, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 
-[node name="Sprite2D" type="Sprite2D" parent="tocino" unique_id=1923547977]
+[sub_resource type="RectangleShape2D" id="exit_shape"]
+size = Vector2(150, 110)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="tocino" unique_id=626654990]
-root_node = NodePath("../..")
+[node name="Nivel1" type="Node2D"]
+script = ExtResource("1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="tocino" unique_id=1289331710]
+[node name="Pisos" type="Node2D" parent="."]
 
-[node name="Camera2D" type="Camera2D" parent="tocino/CollisionShape2D" unique_id=567313717]
+[node name="Escenario" type="Node2D" parent="."]
+
+[node name="Limites" type="Node2D" parent="."]
+
+[node name="Cuache" parent="." instance=ExtResource("3")]
+position = Vector2(765, 1920)
+
+[node name="Camera2D" type="Camera2D" parent="Cuache"]
+position_smoothing_enabled = true
+position_smoothing_speed = 5.0
+limit_left = 0
+limit_top = 0
+limit_right = 1530
+limit_bottom = 2130
+
+[node name="Salida" type="Area2D" parent="."]
+position = Vector2(765, 228)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Salida"]
+shape = SubResource("exit_shape")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Barra" type="PanelContainer" parent="HUD"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 944.0
+offset_bottom = 72.0
+
+[node name="Fila" type="HBoxContainer" parent="HUD/Barra"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Titulo" type="Label" parent="HUD/Barra/Fila"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "NIVEL 1 · LA FOGATA"
+
+[node name="Espacio" type="Control" parent="HUD/Barra/Fila"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Tiempo" type="Label" parent="HUD/Barra/Fila"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Tiempo: 120"
+
+[node name="Pausa" type="Button" parent="HUD/Barra/Fila"]
+layout_mode = 2
+custom_minimum_size = Vector2(54, 48)
+tooltip_text = "Pausar"
+theme_override_styles/normal = SubResource("pause_style")
+theme_override_styles/hover = SubResource("pause_style")
+theme_override_styles/pressed = SubResource("pause_style")
+
+[node name="BarraIzquierda" type="ColorRect" parent="HUD/Barra/Fila/Pausa"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 11.0
+offset_right = 23.0
+offset_bottom = 35.0
+mouse_filter = 2
+color = Color(1, 0.84, 0.55, 1)
+
+[node name="BarraDerecha" type="ColorRect" parent="HUD/Barra/Fila/Pausa"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 11.0
+offset_right = 37.0
+offset_bottom = 35.0
+mouse_filter = 2
+color = Color(1, 0.84, 0.55, 1)
+
+[node name="PausaPanel" type="ColorRect" parent="HUD"]
+visible = false
+offset_right = 960.0
+offset_bottom = 720.0
+color = Color(0.09, 0.055, 0.03, 0.8)
+
+[node name="Caja" type="VBoxContainer" parent="HUD/PausaPanel"]
+offset_left = 300.0
+offset_top = 218.0
+offset_right = 660.0
+offset_bottom = 500.0
+theme_override_constants/separation = 20
+
+[node name="Titulo" type="Label" parent="HUD/PausaPanel/Caja"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+text = "PAUSA"
+
+[node name="Reanudar" type="Button" parent="HUD/PausaPanel/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "Continuar"
+
+[node name="Reiniciar" type="Button" parent="HUD/PausaPanel/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "Reiniciar nivel"
+
+[node name="Volver" type="Button" parent="HUD/PausaPanel/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "Volver al menú"
+
+[node name="Resultado" type="ColorRect" parent="HUD"]
+visible = false
+offset_right = 960.0
+offset_bottom = 720.0
+color = Color(0.08, 0.065, 0.04, 0.78)
+
+[node name="Caja" type="VBoxContainer" parent="HUD/Resultado"]
+offset_left = 245.0
+offset_top = 240.0
+offset_right = 715.0
+offset_bottom = 490.0
+theme_override_constants/separation = 20
+
+[node name="Mensaje" type="Label" parent="HUD/Resultado/Caja"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1
+text = "¡Llegaste a la salida!"
+
+[node name="Reintentar" type="Button" parent="HUD/Resultado/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 58)
+text = "Jugar otra vez"
+
+[node name="Volver" type="Button" parent="HUD/Resultado/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 58)
+text = "Volver al menú"
