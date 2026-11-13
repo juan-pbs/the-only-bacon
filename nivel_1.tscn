@@ -1,7 +1,26 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/nivel_1.gd" id="1"]
-[ext_resource type="PackedScene" path="res://cuache.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://tocino.tscn" id="3"]
+
+[sub_resource type="StyleBoxFlat" id="life_background"]
+bg_color = Color(0.2, 0.085, 0.075, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95, 0.77, 0.48, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="life_fill"]
+bg_color = Color(0.94, 0.29, 0.34, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="pause_style"]
 bg_color = Color(0.29, 0.16, 0.08, 1)
@@ -27,10 +46,10 @@ script = ExtResource("1")
 
 [node name="Limites" type="Node2D" parent="."]
 
-[node name="Cuache" parent="." instance=ExtResource("3")]
+[node name="Tocino" parent="." instance=ExtResource("3")]
 position = Vector2(765, 1920)
 
-[node name="Camera2D" type="Camera2D" parent="Cuache"]
+[node name="Camera2D" type="Camera2D" parent="Tocino"]
 position_smoothing_enabled = true
 position_smoothing_speed = 5.0
 limit_left = 0
@@ -64,6 +83,19 @@ text = "NIVEL 1 · LA FOGATA"
 [node name="Espacio" type="Control" parent="HUD/Barra/Fila"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="VidaTexto" type="Label" parent="HUD/Barra/Fila"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "VIDA"
+
+[node name="VidaBarra" type="ProgressBar" parent="HUD/Barra/Fila"]
+custom_minimum_size = Vector2(165, 23)
+layout_mode = 2
+theme_override_styles/background = SubResource("life_background")
+theme_override_styles/fill = SubResource("life_fill")
+value = 100.0
+show_percentage = false
 
 [node name="Tiempo" type="Label" parent="HUD/Barra/Fila"]
 layout_mode = 2

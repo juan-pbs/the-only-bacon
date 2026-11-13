@@ -1,0 +1,188 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/nivel_avanzado.gd" id="1"]
+[ext_resource type="PackedScene" path="res://tocino.tscn" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="life_background"]
+bg_color = Color(0.2, 0.085, 0.075, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95, 0.77, 0.48, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="life_fill"]
+bg_color = Color(0.94, 0.29, 0.34, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="CircleShape2D" id="exit_shape"]
+radius = 76.0
+
+[sub_resource type="StyleBoxFlat" id="pause_style"]
+bg_color = Color(0.22, 0.18, 0.17, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.88, 0.67, 0.38, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[node name="Nivel2" type="Node2D"]
+script = ExtResource("1")
+level_number = 2
+
+[node name="Pisos" type="Node2D" parent="."]
+z_index = -2
+
+[node name="Escenario" type="Node2D" parent="."]
+
+[node name="Limites" type="Node2D" parent="."]
+
+[node name="Tocino" parent="." instance=ExtResource("2")]
+
+[node name="Camera2D" type="Camera2D" parent="Tocino"]
+position_smoothing_enabled = true
+position_smoothing_speed = 5.0
+
+[node name="Salida" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Salida"]
+shape = SubResource("exit_shape")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Barra" type="PanelContainer" parent="HUD"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 944.0
+offset_bottom = 72.0
+
+[node name="Fila" type="HBoxContainer" parent="HUD/Barra"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Titulo" type="Label" parent="HUD/Barra/Fila"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "NIVEL 2 · EL BODEGÓN DE HUEVOS"
+
+[node name="Espacio" type="Control" parent="HUD/Barra/Fila"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VidaTexto" type="Label" parent="HUD/Barra/Fila"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "VIDA"
+
+[node name="VidaBarra" type="ProgressBar" parent="HUD/Barra/Fila"]
+custom_minimum_size = Vector2(165, 23)
+layout_mode = 2
+theme_override_styles/background = SubResource("life_background")
+theme_override_styles/fill = SubResource("life_fill")
+value = 100.0
+show_percentage = false
+
+[node name="Tiempo" type="Label" parent="HUD/Barra/Fila"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Tiempo: 190"
+
+[node name="Pausa" type="Button" parent="HUD/Barra/Fila"]
+layout_mode = 2
+custom_minimum_size = Vector2(54, 48)
+tooltip_text = "Pausar"
+theme_override_styles/normal = SubResource("pause_style")
+theme_override_styles/hover = SubResource("pause_style")
+theme_override_styles/pressed = SubResource("pause_style")
+
+[node name="BarraIzquierda" type="ColorRect" parent="HUD/Barra/Fila/Pausa"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 11.0
+offset_right = 23.0
+offset_bottom = 35.0
+mouse_filter = 2
+color = Color(1, 0.84, 0.55, 1)
+
+[node name="BarraDerecha" type="ColorRect" parent="HUD/Barra/Fila/Pausa"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 11.0
+offset_right = 37.0
+offset_bottom = 35.0
+mouse_filter = 2
+color = Color(1, 0.84, 0.55, 1)
+
+[node name="PausaPanel" type="ColorRect" parent="HUD"]
+visible = false
+offset_right = 960.0
+offset_bottom = 720.0
+color = Color(0.07, 0.06, 0.06, 0.82)
+
+[node name="Caja" type="VBoxContainer" parent="HUD/PausaPanel"]
+offset_left = 300.0
+offset_top = 218.0
+offset_right = 660.0
+offset_bottom = 500.0
+theme_override_constants/separation = 20
+
+[node name="Titulo" type="Label" parent="HUD/PausaPanel/Caja"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+text = "PAUSA"
+
+[node name="Reanudar" type="Button" parent="HUD/PausaPanel/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "Continuar"
+
+[node name="Reiniciar" type="Button" parent="HUD/PausaPanel/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "Reiniciar nivel"
+
+[node name="Volver" type="Button" parent="HUD/PausaPanel/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "Volver al menú"
+
+[node name="Resultado" type="ColorRect" parent="HUD"]
+visible = false
+offset_right = 960.0
+offset_bottom = 720.0
+color = Color(0.07, 0.06, 0.06, 0.82)
+
+[node name="Caja" type="VBoxContainer" parent="HUD/Resultado"]
+offset_left = 245.0
+offset_top = 235.0
+offset_right = 715.0
+offset_bottom = 500.0
+theme_override_constants/separation = 20
+
+[node name="Mensaje" type="Label" parent="HUD/Resultado/Caja"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+text = "¡Llegaste a la salida!"
+
+[node name="Accion" type="Button" parent="HUD/Resultado/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 58)
+text = "Siguiente nivel"
+
+[node name="Volver" type="Button" parent="HUD/Resultado/Caja"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 58)
+text = "Volver al menú"

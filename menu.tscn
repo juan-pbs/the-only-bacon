@@ -152,9 +152,3 @@ theme_override_styles/normal = SubResource("button_style")
 theme_override_styles/hover = SubResource("button_hover")
 theme_override_styles/pressed = SubResource("button_hover")
 text = "Salir"
-
-[node name="Aviso" type="AcceptDialog" parent="."]
-title = "Nivel en desarrollo"
-dialog_text = "Este nivel todavía está en desarrollo."
-ok_button_text = "Entendido"
-
