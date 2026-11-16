@@ -4,6 +4,7 @@ const TLACUA_ATLAS := preload("res://assets/sprites/acciones/tlacua-direcciones.
 const CUACHE_ATLAS := preload("res://assets/sprites/acciones/cuache-direcciones.png")
 const TLACUA_ACTIONS := preload("res://assets/sprites/acciones/tlacua-acciones.png")
 const CUACHE_ACTIONS := preload("res://assets/sprites/acciones/cuache-acciones.png")
+const OIL_BOTTLE := preload("res://scripts/botella_aceite.gd")
 const DIRECTIONS := ["down", "left", "right", "up"]
 const MAX_HEALTH := 400
 const CAN_DAMAGE := 100
@@ -21,6 +22,13 @@ var attack_cooldown := 0.0
 var action_state := ""
 var action_timer := 0.0
 var pending_damage := false
+var oil_cooldown := 4.0
+var pending_oil := false
+var pounce_direction := Vector2.ZERO
+var guard_post := Vector2.INF
+var guard_radius := 420.0
+var pursuit_time := 0.0
+var last_seen_position := Vector2.ZERO
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -68,21 +76,30 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if not enabled and not defeated:
+	if not enabled:
 		return
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	oil_cooldown = maxf(0.0, oil_cooldown - delta)
 	if action_state != "":
 		action_timer = maxf(0.0, action_timer - delta)
+		if action_state == "oil" and pending_oil and action_timer <= 0.2:
+			pending_oil = false
+			_throw_oil()
 		if action_state == "attack" and pending_damage and action_timer <= 0.28:
 			pending_damage = false
-			if is_instance_valid(target) and global_position.distance_to(target.global_position) < 90.0:
+			if is_instance_valid(target) and _target_exposed() and global_position.distance_to(target.global_position) < (112.0 if kind == "tlacua" else 82.0) and _can_see_target():
 				target.take_damage(18 if kind == "tlacua" else 13, global_position)
 		if action_timer <= 0.0:
-			var was_hurt := action_state == "hurt"
-			action_state = ""
-			if was_hurt and (stun_time > 0.0 or defeated):
-				sprite.play("stunned")
+			if action_state == "pounce_windup":
+				action_state = "pounce"
+				action_timer = 0.38
+			else:
+				var was_hurt := action_state == "hurt"
+				action_state = ""
+				if was_hurt and (stun_time > 0.0 or defeated):
+					sprite.play("stunned")
 	_update_pose()
+	queue_redraw()
 
 
 func _physics_process(delta: float) -> void:
@@ -95,23 +112,47 @@ func _physics_process(delta: float) -> void:
 		if stun_time <= 0.0 and action_state == "":
 			sprite.play("idle_" + facing)
 		return
+	if action_state == "pounce":
+		if guard_post != Vector2.INF and (global_position + pounce_direction * 610.0 * delta).distance_to(guard_post) > guard_radius:
+			action_state = ""
+			pending_damage = false
+			velocity = Vector2.ZERO
+			return
+		velocity = pounce_direction * 610.0
+		move_and_slide()
+		if pending_damage and is_instance_valid(target) and _target_exposed() and global_position.distance_to(target.global_position) < 78.0 and _can_see_target():
+			pending_damage = false
+			target.take_damage(15, global_position)
+		return
 	if action_state != "":
 		velocity = Vector2.ZERO
 		return
-	if target != null and global_position.distance_to(target.global_position) < 83.0 and attack_cooldown <= 0.0:
+	var target_visible := target != null and _target_exposed() and _can_see_target()
+	var target_in_guard := kind != "cuache" or guard_post == Vector2.INF or target.global_position.distance_to(guard_post) <= guard_radius
+	if kind == "tlacua":
+		pursuit_time = maxf(0.0, pursuit_time - delta)
+		if target_visible and global_position.distance_to(target.global_position) < 1000.0:
+			last_seen_position = target.global_position
+			pursuit_time = 5.0
+	if target_visible and target_in_guard and global_position.distance_to(target.global_position) < (106.0 if kind == "tlacua" else 225.0) and attack_cooldown <= 0.0:
 		_start_attack()
 		return
+	if kind == "tlacua" and target_visible and oil_cooldown <= 0.0 and global_position.distance_to(target.global_position) < 650.0:
+		_start_oil_throw()
+		return
 	var destination := global_position
-	var chasing := target != null and global_position.distance_to(target.global_position) < 490.0 and _can_see_target()
+	var chasing := (pursuit_time > 0.0 if kind == "tlacua" else target_visible and target_in_guard and global_position.distance_to(target.global_position) < 420.0)
 	if chasing:
-		destination = target.global_position
+		destination = target.global_position if target_visible else last_seen_position
+		if kind == "tlacua" and not target_visible and global_position.distance_to(last_seen_position) < 25.0:
+			pursuit_time = 0.0
 	elif not patrol_points.is_empty():
 		destination = patrol_points[patrol_index]
 		if global_position.distance_to(destination) < 25.0:
 			patrol_index = (patrol_index + 1) % patrol_points.size()
 			destination = patrol_points[patrol_index]
 	var direction := global_position.direction_to(destination) if global_position.distance_to(destination) > 8.0 else Vector2.ZERO
-	velocity = direction * (220.0 if chasing else 145.0)
+	velocity = direction * ((315.0 if kind == "tlacua" else 220.0) if chasing else 145.0)
 	move_and_slide()
 	if direction != Vector2.ZERO:
 		if absf(direction.x) > absf(direction.y):
@@ -123,12 +164,12 @@ func _physics_process(delta: float) -> void:
 		sprite.play(animation)
 
 
-func take_hit() -> void:
+func take_hit(amount: int = CAN_DAMAGE, stun_duration: float = 2.0) -> void:
 	if defeated:
 		return
-	health = maxi(0, health - CAN_DAMAGE)
+	health = maxi(0, health - amount)
 	$VidaBarra.value = health
-	stun_time = 2.0
+	stun_time = stun_duration
 	action_state = "hurt"
 	action_timer = 0.55
 	pending_damage = false
@@ -140,19 +181,52 @@ func take_hit() -> void:
 
 
 func _start_attack() -> void:
-	action_state = "attack"
-	action_timer = 0.5
-	attack_cooldown = 1.35 if kind == "tlacua" else 1.6
+	action_state = "attack" if kind == "tlacua" else "pounce_windup"
+	action_timer = 0.5 if kind == "tlacua" else 0.28
+	attack_cooldown = 1.35 if kind == "tlacua" else 2.2
+	if kind == "cuache":
+		pounce_direction = global_position.direction_to(target.global_position)
 	pending_damage = true
 	velocity = Vector2.ZERO
 	sprite.flip_h = facing == "left"
 	sprite.play("attack")
 
 
+func _start_oil_throw() -> void:
+	action_state = "oil"
+	action_timer = 0.55
+	oil_cooldown = 7.0
+	pending_oil = true
+	sprite.flip_h = facing == "left"
+	sprite.play("attack")
+
+
+func _throw_oil() -> void:
+	if not is_instance_valid(target):
+		return
+	var bottle: Node2D = OIL_BOTTLE.new()
+	bottle.destination = target.global_position + target.velocity * 0.25
+	bottle.position = global_position
+	get_parent().add_child(bottle)
+
+
 func _can_see_target() -> bool:
-	var query := PhysicsRayQueryParameters2D.create(global_position, target.global_position, 2)
+	if not is_instance_valid(target) or target.spawn_sheltered or target.is_hidden and global_position.distance_to(target.global_position) > 50.0:
+		return false
+	var query := PhysicsRayQueryParameters2D.create(global_position, target.global_position, 18)
 	query.exclude = [get_rid()]
 	return get_world_2d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func _target_exposed() -> bool:
+	return not target.spawn_sheltered and (not target.is_hidden or global_position.distance_to(target.global_position) <= 50.0)
+
+
+func _draw() -> void:
+	if kind == "tlacua" and action_state == "attack":
+		draw_arc(Vector2.ZERO, 110.0, 0.0, TAU, 32, Color(1.0, 0.25, 0.15, 0.7), 5.0)
+	elif kind == "cuache" and action_state == "pounce_windup":
+		draw_line(Vector2.ZERO, pounce_direction * 170.0, Color(1.0, 0.75, 0.18, 0.8), 4.0)
 
 
 func _base_scale() -> float:
@@ -162,7 +236,7 @@ func _base_scale() -> float:
 func _update_pose() -> void:
 	var step := sprite.frame
 	var base := _base_scale()
-	if action_state == "attack":
+	if action_state in ["attack", "pounce_windup", "pounce"]:
 		sprite.position = Vector2(8 if facing == "right" else (-8 if facing == "left" else 0), -8 if step in [1, 2] else 0)
 		sprite.rotation = (-0.12 if step in [0, 1] else 0.14) * (-1 if facing == "left" else 1)
 		sprite.scale = Vector2(base * 1.12, base * 0.95) if step in [1, 2] else Vector2.ONE * base

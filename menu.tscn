@@ -152,3 +152,10 @@ theme_override_styles/normal = SubResource("button_style")
 theme_override_styles/hover = SubResource("button_hover")
 theme_override_styles/pressed = SubResource("button_hover")
 text = "Salir"
+
+[node name="Controles" type="Label" parent="Centro"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+autowrap_mode = 3
+text = "WASD: moverse · Shift: correr · J: lanzar · K: saltar · L: esquivar · H: ocultarse · Q: cambiar objeto"

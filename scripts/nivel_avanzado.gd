@@ -1,21 +1,19 @@
-extends Node2D
+extends "res://scripts/nivel_base.gd"
 
 const TILE_SIZE := 102.0
-const FLOOR_ATLAS := preload("res://assets/sprites/pisos-niveles.png")
 const PROP_ATLAS := preload("res://assets/sprites/objetos-escenario.png")
 const EXPLORATION_FOG := preload("res://shaders/exploration_fog.gdshader")
+const MATCH_DARKNESS := preload("res://shaders/match_darkness.gdshader")
 const TLACUA_SCENE := preload("res://tlacua.tscn")
 const CUACHE_SCENE := preload("res://cuache_enemigo.tscn")
 const FOG_PIXEL_SIZE := 16.0
 const FOG_REVEAL_RADIUS := 310.0
-const TILE_EDGES := [0, 105, 209, 314, 418, 523, 627]
 const REGIONS := {
 	"crate": Rect2(45, 80, 350, 370),
 	"eggs": Rect2(480, 65, 355, 390),
 	"oil": Rect2(875, 90, 435, 365),
 	"stove": Rect2(30, 500, 415, 360),
 	"table": Rect2(460, 510, 435, 355),
-	"door": Rect2(915, 500, 400, 365),
 	"fence": Rect2(1320, 520, 435, 350)
 }
 const PROP_SCALES := {"crate": 0.5, "eggs": 0.47, "stove": 0.58, "table": 0.68}
@@ -28,32 +26,20 @@ const PROP_COLLISIONS := {
 
 @export_range(2, 3) var level_number := 2
 
-var remaining := 160.0
-var finished := false
-var paused := false
-var won := false
-var enemies: Array[CharacterBody2D] = []
 var fog_overlay: ColorRect
 var fog_image: Image
 var fog_texture: ImageTexture
 var last_reveal_position := Vector2.INF
-
-@onready var player: CharacterBody2D = $Tocino
-@onready var timer_label: Label = $HUD/Barra/Fila/Tiempo
-@onready var health_bar: ProgressBar = $HUD/Barra/Fila/VidaBarra
-@onready var pause_panel: ColorRect = $HUD/PausaPanel
-@onready var result: ColorRect = $HUD/Resultado
-
 
 func _ready() -> void:
 	var columns := 24 if level_number == 2 else 30
 	var rows := 32 if level_number == 2 else 40
 	var width := columns * TILE_SIZE
 	var height := rows * TILE_SIZE
-	remaining = 190.0 if level_number == 2 else 210.0
+	remaining = 190.0 if level_number == 2 else 180.0
 	$HUD/Barra/Fila/Titulo.text = "NIVEL 2 · EL BODEGÓN DE HUEVOS" if level_number == 2 else "NIVEL 3 · LA COCINA DEL DESAYUNO"
 	player.position = Vector2(width / 2.0, height - 260.0)
-	$Salida.position = Vector2(width / 2.0, 235.0)
+	$Salida.position = Vector2(width - 70.0, 565.0) if level_number == 2 else Vector2(70.0, 565.0)
 	$Tocino/Camera2D.limit_left = 0
 	$Tocino/Camera2D.limit_top = 0
 	$Tocino/Camera2D.limit_right = int(width)
@@ -62,32 +48,25 @@ func _ready() -> void:
 	_build_boundaries(width, height)
 	_build_layout()
 	_build_enemies()
+	spawn_start_shelter()
 	if level_number == 2:
 		_setup_exploration_fog(Vector2(width, height))
-	player.health_changed.connect(_update_health)
-	player.defeated.connect(func() -> void: _finish(false, "¡Te atraparon!"))
-	$Salida.body_entered.connect(_on_exit_entered)
-	$HUD/Barra/Fila/Pausa.pressed.connect(_toggle_pause)
-	$HUD/PausaPanel/Caja/Reanudar.pressed.connect(_toggle_pause)
-	$HUD/PausaPanel/Caja/Reiniciar.pressed.connect(_restart)
-	$HUD/PausaPanel/Caja/Volver.pressed.connect(_go_to_menu)
-	$HUD/Resultado/Caja/Accion.pressed.connect(_result_action)
-	$HUD/Resultado/Caja/Volver.pressed.connect(_go_to_menu)
-	$Tocino/Camera2D.make_current()
-	$Tocino/Camera2D.reset_smoothing()
-	_update_health(player.health)
-	timer_label.text = "Tiempo: %d" % int(remaining)
+	else:
+		_setup_match_darkness(Vector2(width, height))
+	super._ready()
+
+
+func _level_number() -> int:
+	return level_number
 
 
 func _process(delta: float) -> void:
-	if paused or finished:
-		return
-	if fog_overlay != null:
-		_update_exploration_fog()
-	remaining = maxf(0.0, remaining - delta)
-	timer_label.text = "Tiempo: %d" % ceili(remaining)
-	if remaining <= 0.0:
-		_finish(false, "Se acabó el tiempo")
+	if fog_overlay != null and not paused and not finished:
+		if level_number == 2:
+			_update_exploration_fog()
+		else:
+			fog_overlay.material.set_shader_parameter("flame_position", player.match_light_position())
+	super._process(delta)
 
 
 func _setup_exploration_fog(world_size: Vector2) -> void:
@@ -106,6 +85,21 @@ func _setup_exploration_fog(world_size: Vector2) -> void:
 	fog_overlay.material = material
 	add_child(fog_overlay)
 	_update_exploration_fog()
+
+
+func _setup_match_darkness(world_size: Vector2) -> void:
+	player.equip_match()
+	fog_overlay = ColorRect.new()
+	fog_overlay.name = "OscuridadDelCerillo"
+	fog_overlay.size = world_size
+	fog_overlay.z_index = 100
+	fog_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var material := ShaderMaterial.new()
+	material.shader = MATCH_DARKNESS
+	material.set_shader_parameter("world_size", world_size)
+	material.set_shader_parameter("flame_position", player.match_light_position())
+	fog_overlay.material = material
+	add_child(fog_overlay)
 
 
 func _update_exploration_fog() -> void:
@@ -129,45 +123,38 @@ func _update_exploration_fog() -> void:
 	fog_texture.update(fog_image)
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
-		_toggle_pause()
-		get_viewport().set_input_as_handled()
-
-
 func _build_floor(columns: int, rows: int) -> void:
-	for row in range(rows):
-		for column in range(columns):
-			var atlas_column: int = (column + row * 2) % 6
-			var atlas_row: int = (row + column * 3) % 6
-			var source_x := 627 if level_number == 2 else 0
-			var source_y := 0 if level_number == 2 else 627
-			var region := Rect2(
-				source_x + TILE_EDGES[atlas_column], source_y + TILE_EDGES[atlas_row],
-				TILE_EDGES[atlas_column + 1] - TILE_EDGES[atlas_column],
-				TILE_EDGES[atlas_row + 1] - TILE_EDGES[atlas_row]
-			)
-			var tile := Sprite2D.new()
-			tile.texture = _atlas_region(FLOOR_ATLAS, region)
-			tile.position = Vector2((column + 0.5) * TILE_SIZE, (row + 0.5) * TILE_SIZE)
-			tile.scale = Vector2(TILE_SIZE / region.size.x, TILE_SIZE / region.size.y)
-			$Pisos.add_child(tile)
+	$Pisos.configure(columns, rows, level_number)
 
 
 func _build_boundaries(width: float, height: float) -> void:
-	_add_wall("Pared izquierda", Rect2(0, 0, 130, height))
-	_add_wall("Pared derecha", Rect2(width - 130, 0, 130, height))
+	var gap_y: float = $Salida.position.y + $Tocino/CollisionShape2D.position.y
+	if level_number == 2:
+		_add_wall("Pared izquierda", Rect2(0, 0, 130, height))
+		_add_wall("Pared derecha superior", Rect2(width - 130, 0, 130, gap_y - 25.0))
+		_add_wall("Pared derecha inferior", Rect2(width - 130, gap_y + 25.0, 130, height - gap_y - 25.0))
+	else:
+		_add_wall("Pared izquierda superior", Rect2(0, 0, 130, gap_y - 25.0))
+		_add_wall("Pared izquierda inferior", Rect2(0, gap_y + 25.0, 130, height - gap_y - 25.0))
+		_add_wall("Pared derecha", Rect2(width - 130, 0, 130, height))
 	_add_wall("Pared inferior", Rect2(0, height - 145, width, 145))
-	_add_wall("Pared superior izquierda", Rect2(0, 0, width / 2.0 - 135, 125))
-	_add_wall("Pared superior derecha", Rect2(width / 2.0 + 135, 0, width / 2.0 - 135, 125))
+	_add_wall("Pared superior", Rect2(0, 0, width, 125))
 	for x in range(110, int(width), 210):
-		if absf(x - width / 2.0) > 150.0:
-			_add_decoration("fence", Vector2(x, 45), 0.55)
+		_add_decoration("fence", Vector2(x, 45), 0.55)
 		_add_decoration("fence", Vector2(x, height - 45), 0.55)
-	for y in range(250, int(height - 80), 210):
-		_add_decoration("fence", Vector2(42, y), 0.55, PI / 2.0)
-		_add_decoration("fence", Vector2(width - 42, y), 0.55, PI / 2.0)
-	_add_decoration("door", Vector2(width / 2.0, 145), 0.62)
+	_decorate_side(42.0, height, gap_y if level_number == 3 else -1.0)
+	_decorate_side(width - 42.0, height, gap_y if level_number == 2 else -1.0)
+
+
+func _decorate_side(x: float, height: float, gap_y: float) -> void:
+	# The fence art has transparent padding, so extend it to match the narrow collision gap.
+	var segments := [Vector2(0.0, height)] if gap_y < 0.0 else [Vector2(0.0, gap_y), Vector2(gap_y, height)]
+	for segment in segments:
+		var segment_length: float = segment.y - segment.x
+		var pieces := ceili(segment_length / 230.0)
+		var piece_length := segment_length / pieces
+		for index in range(pieces):
+			_add_decoration("fence", Vector2(x, segment.x + (index + 0.5) * piece_length), piece_length / 435.0, PI / 2.0)
 
 
 func _build_layout() -> void:
@@ -230,9 +217,9 @@ func _build_layout() -> void:
 		Rect2(player.position - Vector2(125, 125), Vector2(250, 250)),
 		Rect2($Salida.position - Vector2(150, 150), Vector2(300, 300))
 	]
-	var enemy_spawns := [Vector2(1300, 1360), Vector2(800, 2050)] if level_number == 2 else [Vector2(1130, 1800), Vector2(1570, 1050)]
+	var enemy_spawns := [player.position + Vector2(0, -330), $Salida.position + Vector2(-125, 0)] if level_number == 2 else [player.position + Vector2(0, -330), $Salida.position + Vector2(125, 0)]
 	for spawn in enemy_spawns:
-		reserved.append(Rect2(spawn * layout_scale - Vector2(85, 85), Vector2(170, 170)))
+		reserved.append(Rect2(spawn - Vector2(85, 85), Vector2(170, 170)))
 	var world_size := Vector2(2448, 3264) if level_number == 2 else Vector2(3060, 4080)
 	for index in range(props.size()):
 		var entry: Array = props[index]
@@ -248,6 +235,23 @@ func _build_layout() -> void:
 		var position := _find_clear_position(oil_position * layout_scale, Vector2(170, 170), occupied, reserved, world_size)
 		if position != Vector2.INF:
 			_add_oil(position)
+	var items := [
+		["can", Vector2(1020, 2250)], ["pan", Vector2(620, 1660)],
+		["can", Vector2(1450, 1090)], ["butter", Vector2(430, 1240)],
+		["clock", Vector2(1210, 580)]
+	] if level_number == 2 else [
+		["can", Vector2(1150, 2810)], ["pan", Vector2(1650, 2270)],
+		["can", Vector2(640, 1840)], ["butter", Vector2(1690, 1210)],
+		["clock", Vector2(1050, 790)]
+	]
+	for entry in items:
+		var position := _find_clear_position(entry[1] * layout_scale, Vector2(80, 80), occupied, reserved, world_size)
+		if position != Vector2.INF:
+			spawn_pickup(entry[0], position)
+	for hide_position in [Vector2(460, 2070), Vector2(1530, 1560), Vector2(570, 740)]:
+		var position := _find_clear_position(hide_position * layout_scale, Vector2(130, 130), occupied, reserved, world_size)
+		if position != Vector2.INF:
+			spawn_hide_zone(position)
 
 
 func _find_clear_position(target: Vector2, size: Vector2, occupied: Array[Rect2], reserved: Array[Rect2], world_size: Vector2) -> Vector2:
@@ -277,13 +281,11 @@ func _find_clear_position(target: Vector2, size: Vector2, occupied: Array[Rect2]
 
 
 func _build_enemies() -> void:
-	var layout_scale := _layout_scale()
-	if level_number == 2:
-		_add_enemy("tlacua", Vector2(1300, 1360) * layout_scale, [Vector2(1300, 1360) * layout_scale, Vector2(1550, 1320) * layout_scale])
-		_add_enemy("cuache", Vector2(800, 2050) * layout_scale, [Vector2(800, 2050) * layout_scale, Vector2(760, 1830) * layout_scale])
-	else:
-		_add_enemy("tlacua", Vector2(1130, 1800) * layout_scale, [Vector2(1130, 1800) * layout_scale, Vector2(1410, 1810) * layout_scale])
-		_add_enemy("cuache", Vector2(1570, 1050) * layout_scale, [Vector2(1570, 1050) * layout_scale, Vector2(1780, 780) * layout_scale])
+	var tlacua_start := player.position + Vector2(0, -330)
+	_add_enemy("tlacua", tlacua_start, [tlacua_start, tlacua_start + Vector2(80, -70)])
+	var side := -1.0 if level_number == 2 else 1.0
+	var guard_start: Vector2 = $Salida.position + Vector2(side * 125.0, 0)
+	_add_enemy("cuache", guard_start, [guard_start, guard_start + Vector2(side * 40.0, -95.0)])
 
 
 func _layout_scale() -> Vector2:
@@ -295,6 +297,8 @@ func _add_enemy(kind: String, at: Vector2, route: Array[Vector2]) -> void:
 	enemy.position = at
 	enemy.patrol_points = route
 	enemy.target = player
+	if kind == "cuache":
+		enemy.guard_post = $Salida.position
 	add_child(enemy)
 	enemies.append(enemy)
 
@@ -302,7 +306,7 @@ func _add_enemy(kind: String, at: Vector2, route: Array[Vector2]) -> void:
 func _add_prop(label: String, kind: String, at: Vector2) -> void:
 	var body := StaticBody2D.new()
 	body.name = label
-	body.collision_layer = 2
+	body.collision_layer = 16 if kind == "eggs" else 2
 	body.collision_mask = 0
 	body.position = at
 	var sprite := Sprite2D.new()
@@ -330,24 +334,7 @@ func _add_box_shape(body: StaticBody2D, size: Vector2, offset: Vector2) -> void:
 
 
 func _add_oil(at: Vector2) -> void:
-	var area := Area2D.new()
-	area.name = "Charco de aceite"
-	area.collision_layer = 0
-	area.collision_mask = 1
-	area.position = at
-	area.z_index = -1
-	var sprite := Sprite2D.new()
-	sprite.texture = _atlas_region(PROP_ATLAS, REGIONS["oil"])
-	sprite.scale = Vector2.ONE * 0.48
-	area.add_child(sprite)
-	var shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = 82.0
-	shape.shape = circle
-	area.add_child(shape)
-	area.body_entered.connect(_on_oil_entered)
-	area.body_exited.connect(_on_oil_exited)
-	$Escenario.add_child(area)
+	spawn_oil(at, 25.0)
 
 
 func _add_decoration(kind: String, at: Vector2, size_scale: float, angle: float = 0.0) -> void:
@@ -378,68 +365,3 @@ func _atlas_region(atlas: Texture2D, region: Rect2) -> AtlasTexture:
 	texture.atlas = atlas
 	texture.region = region
 	return texture
-
-
-func _on_oil_entered(body: Node2D) -> void:
-	if body == player:
-		player.enter_oil()
-
-
-func _on_oil_exited(body: Node2D) -> void:
-	if body == player:
-		player.exit_oil()
-
-
-func _on_exit_entered(body: Node2D) -> void:
-	if body == player and not finished:
-		_finish(true, "¡Saliste del Bodegón!" if level_number == 2 else "¡Escapaste de la Cocina!")
-
-
-func _update_health(value: int) -> void:
-	health_bar.value = value
-
-
-func _toggle_pause() -> void:
-	if finished:
-		return
-	paused = not paused
-	player.controls_enabled = not paused
-	player.set_process(not paused)
-	for enemy in enemies:
-		enemy.enabled = not paused
-	for can in get_tree().get_nodes_in_group("projectiles"):
-		can.set_physics_process(not paused)
-	pause_panel.visible = paused
-	if paused:
-		$HUD/PausaPanel/Caja/Reanudar.grab_focus()
-	else:
-		$HUD/Barra/Fila/Pausa.grab_focus()
-
-
-func _finish(success: bool, text: String) -> void:
-	if finished:
-		return
-	finished = true
-	won = success
-	player.controls_enabled = false
-	for enemy in enemies:
-		enemy.enabled = false
-	$HUD/Resultado/Caja/Mensaje.text = text
-	$HUD/Resultado/Caja/Accion.text = "Siguiente nivel" if success and level_number == 2 else "Jugar otra vez"
-	result.show()
-	$HUD/Resultado/Caja/Accion.grab_focus()
-
-
-func _result_action() -> void:
-	if won and level_number == 2:
-		get_tree().change_scene_to_file("res://nivel_3.tscn")
-	else:
-		_restart()
-
-
-func _restart() -> void:
-	get_tree().reload_current_scene()
-
-
-func _go_to_menu() -> void:
-	get_tree().change_scene_to_file("res://menu.tscn")

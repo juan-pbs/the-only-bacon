@@ -1,96 +1,55 @@
-extends Node2D
+extends "res://scripts/nivel_base.gd"
 
 const LEVEL_TIME := 120.0
-const TILE_SIZE := 102.0
-const FLOOR_ATLAS := preload("res://assets/sprites/pisos-niveles.png")
 const PROP_ATLAS := preload("res://assets/sprites/objetos-escenario.png")
 const TLACUA_SCENE := preload("res://tlacua.tscn")
-const CUACHE_SCENE := preload("res://cuache_enemigo.tscn")
-const TILE_EDGES := [0, 105, 209, 314, 418, 523, 627]
 const CRATE := Rect2(45, 80, 350, 370)
 const EGGS := Rect2(480, 65, 355, 390)
 const FIRE := Rect2(1315, 65, 445, 420)
 const TABLE := Rect2(460, 510, 435, 355)
-const DOOR := Rect2(915, 500, 400, 365)
 const FENCE := Rect2(1320, 520, 435, 350)
 
-var remaining := LEVEL_TIME
-var finished := false
-var won := false
-var paused := false
 var fire_glow: Polygon2D
-var enemies: Array[CharacterBody2D] = []
-
-@onready var player: CharacterBody2D = $Tocino
-@onready var timer_label: Label = $HUD/Barra/Fila/Tiempo
-@onready var health_bar: ProgressBar = $HUD/Barra/Fila/VidaBarra
-@onready var pause_panel: ColorRect = $HUD/PausaPanel
-@onready var result: ColorRect = $HUD/Resultado
-@onready var message: Label = $HUD/Resultado/Caja/Mensaje
 
 
 func _ready() -> void:
+	remaining = LEVEL_TIME
 	_build_floor()
 	_build_boundaries()
 	_build_props()
 	_build_enemies()
-	player.health_changed.connect(_update_health)
-	player.defeated.connect(func() -> void: _finish("¡Te atraparon!"))
-	$Salida.body_entered.connect(_on_exit_entered)
-	$HUD/Barra/Fila/Pausa.pressed.connect(_toggle_pause)
-	$HUD/PausaPanel/Caja/Reanudar.pressed.connect(_toggle_pause)
-	$HUD/PausaPanel/Caja/Reiniciar.pressed.connect(_restart)
-	$HUD/PausaPanel/Caja/Volver.pressed.connect(_go_to_menu)
-	$HUD/Resultado/Caja/Reintentar.pressed.connect(_restart)
-	$HUD/Resultado/Caja/Volver.pressed.connect(_go_to_menu)
-	$Tocino/Camera2D.make_current()
-	$Tocino/Camera2D.reset_smoothing()
-	_update_health(player.health)
+	_build_pickups()
+	spawn_start_shelter()
+	super._ready()
 
 
 func _process(delta: float) -> void:
 	if fire_glow != null:
 		fire_glow.modulate.a = 0.75 + 0.2 * sin(Time.get_ticks_msec() * 0.006)
-	if paused or finished:
-		return
-	remaining = maxf(0.0, remaining - delta)
-	timer_label.text = "Tiempo: %d" % ceili(remaining)
-	if remaining <= 0.0:
-		_finish("Se acabó el tiempo")
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
-		_toggle_pause()
-		get_viewport().set_input_as_handled()
+	super._process(delta)
 
 
 func _build_floor() -> void:
-	for row in range(21):
-		for column in range(15):
-			var source_column: int = (column + row * 2) % 6
-			var source_row: int = (row + column * 3) % 6
-			var source_y := 627 if abs(column - 7) <= 2 and abs(row - 10) <= 2 else 0
-			var region := Rect2(
-				TILE_EDGES[source_column], source_y + TILE_EDGES[source_row],
-				TILE_EDGES[source_column + 1] - TILE_EDGES[source_column],
-				TILE_EDGES[source_row + 1] - TILE_EDGES[source_row]
-			)
-			var tile := Sprite2D.new()
-			tile.name = "Piso_%02d_%02d" % [column, row]
-			tile.texture = _atlas_region(FLOOR_ATLAS, region)
-			tile.position = Vector2((column + 0.5) * TILE_SIZE, (row + 0.5) * TILE_SIZE)
-			tile.scale = Vector2(TILE_SIZE / region.size.x, TILE_SIZE / region.size.y)
-			$Pisos.add_child(tile)
+	$Pisos.configure(15, 21, 1)
+
+
+func _build_pickups() -> void:
+	spawn_pickup("can", Vector2(680, 1840))
+	spawn_pickup("can", Vector2(930, 1400))
+	spawn_pickup("pan", Vector2(550, 850))
+	spawn_pickup("butter", Vector2(1100, 650))
+	spawn_pickup("clock", Vector2(460, 1260))
+	spawn_hide_zone(Vector2(465, 1740))
+	spawn_hide_zone(Vector2(1080, 1210))
 
 
 func _build_boundaries() -> void:
 	_add_wall("Límite izquierdo", Rect2(0, 0, 140, 2130))
 	_add_wall("Límite derecho", Rect2(1390, 0, 140, 2130))
 	_add_wall("Límite inferior", Rect2(0, 2000, 1530, 130))
-	_add_wall("Límite superior izquierdo", Rect2(0, 0, 655, 135))
-	_add_wall("Límite superior derecho", Rect2(875, 0, 655, 135))
-	for x in [115, 325, 535, 995, 1205, 1415]:
+	_add_wall("Límite superior izquierdo", Rect2(0, 0, 740, 135))
+	_add_wall("Límite superior derecho", Rect2(790, 0, 740, 135))
+	for x in [120, 360, 643, 887, 1170, 1410]:
 		_add_decoration(FENCE, Vector2(x, 45), 0.55)
 	for x in [115, 325, 535, 745, 955, 1165, 1415]:
 		_add_decoration(FENCE, Vector2(x, 2090), 0.55)
@@ -100,7 +59,6 @@ func _build_boundaries() -> void:
 
 
 func _build_props() -> void:
-	_add_decoration(DOOR, Vector2(765, 145), 0.62)
 	_add_prop("Caja noroeste", CRATE, Vector2(300, 480), 0.5, Vector2(160, 175))
 	_add_prop("Caja noreste", CRATE, Vector2(1190, 475), 0.5, Vector2(160, 175))
 	_add_prop("Huevos noroeste", EGGS, Vector2(535, 680), 0.46, Vector2(150, 175))
@@ -130,8 +88,7 @@ func _build_props() -> void:
 
 
 func _build_enemies() -> void:
-	_add_enemy(TLACUA_SCENE, Vector2(1080, 890), [Vector2(1080, 890), Vector2(980, 875)])
-	_add_enemy(CUACHE_SCENE, Vector2(760, 1530), [Vector2(760, 1530), Vector2(840, 1360)])
+	_add_enemy(TLACUA_SCENE, Vector2(765, 1580), [Vector2(765, 1580), Vector2(830, 1640)])
 
 
 func _add_enemy(scene: PackedScene, at: Vector2, route: Array[Vector2]) -> void:
@@ -146,7 +103,7 @@ func _add_enemy(scene: PackedScene, at: Vector2, route: Array[Vector2]) -> void:
 func _add_prop(label: String, region: Rect2, at: Vector2, size_scale: float, collision_size: Vector2) -> void:
 	var body := StaticBody2D.new()
 	body.name = label
-	body.collision_layer = 2
+	body.collision_layer = 16 if region == EGGS else 2
 	body.collision_mask = 0
 	body.position = at
 	var sprite := Sprite2D.new()
@@ -203,54 +160,3 @@ func _atlas_region(atlas: Texture2D, region: Rect2) -> AtlasTexture:
 	texture.atlas = atlas
 	texture.region = region
 	return texture
-
-
-func _on_exit_entered(body: Node2D) -> void:
-	if body == player and not finished:
-		won = true
-		_finish("¡Tocino llegó a la salida!")
-
-
-func _update_health(value: int) -> void:
-	health_bar.value = value
-
-
-func _toggle_pause() -> void:
-	if finished:
-		return
-	paused = not paused
-	player.controls_enabled = not paused
-	player.set_process(not paused)
-	for enemy in enemies:
-		enemy.enabled = not paused
-	for can in get_tree().get_nodes_in_group("projectiles"):
-		can.set_physics_process(not paused)
-	pause_panel.visible = paused
-	if paused:
-		$HUD/PausaPanel/Caja/Reanudar.grab_focus()
-	else:
-		$HUD/Barra/Fila/Pausa.grab_focus()
-
-
-func _finish(text: String) -> void:
-	if finished:
-		return
-	finished = true
-	player.controls_enabled = false
-	for enemy in enemies:
-		enemy.enabled = false
-	message.text = text
-	$HUD/Resultado/Caja/Reintentar.text = "Siguiente nivel" if won else "Reintentar"
-	result.show()
-	$HUD/Resultado/Caja/Reintentar.grab_focus()
-
-
-func _restart() -> void:
-	if won:
-		get_tree().change_scene_to_file("res://nivel_2.tscn")
-	else:
-		get_tree().reload_current_scene()
-
-
-func _go_to_menu() -> void:
-	get_tree().change_scene_to_file("res://menu.tscn")
