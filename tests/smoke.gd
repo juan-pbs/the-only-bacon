@@ -24,7 +24,7 @@ func _run() -> void:
 		await process_frame
 		await physics_frame
 		await process_frame
-		assert(scene.get_node("Pisos").get_child_count() == 0)
+		assert(scene.get_node("Pisos/PisoVisible").texture != null)
 		assert(scene.enemies.size() == (1 if number == 1 else 2))
 		var exit_area: Area2D = scene.get_node("Salida")
 		var opening: RectangleShape2D = exit_area.get_node("CollisionShape2D").shape

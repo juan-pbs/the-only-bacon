@@ -43,12 +43,20 @@ func _run() -> void:
 			for step in range(3):
 				await physics_frame
 				await process_frame
-			assert(not is_instance_valid(item), "%s at %s did not collect in level %d" % [kind, player.position, number])
+			assert(is_instance_valid(item) and item.collected and not item.visible, "%s at %s did not collect in level %d" % [kind, player.position, number])
+			assert(item.respawn_seconds == 5.0)
 			match kind:
 				"can": assert(player.cans == old_cans + 1)
 				"pan": assert(player.pans == old_pans + 1)
 				"butter": assert(player.health == mini(100, old_health + 25))
 				"clock": assert(scene.remaining >= old_time + 9.9)
+		player.global_position = Vector2(-1000, -1000)
+		items[0].respawn_remaining = 5.0
+		items[0]._process(4.9)
+		assert(not items[0].visible, "Pickup respawned before five seconds in level %d" % number)
+		items[0]._process(0.2)
+		await process_frame
+		assert(items[0].visible and not items[0].collected, "Pickup did not respawn in level %d" % number)
 		print("Level %d: %d pickups collected" % [number, items.size()])
 		scene.queue_free()
 		await process_frame

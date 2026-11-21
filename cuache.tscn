@@ -1,21 +1,38 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://dgehq0us10ljk"]
 
-[ext_resource type="Script" path="res://scripts/cuache.gd" id="1"]
+[ext_resource type="Script" uid="uid://5tfpotewajua" path="res://scripts/cuache.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://1r5gkwksynx6" path="res://assets/sprites/acciones/cuache-direcciones.png" id="preview"]
+
+[sub_resource type="AtlasTexture" id="preview_region"]
+atlas = ExtResource("preview")
+region = Rect2(0, 0, 428, 450)
+
+[sub_resource type="SpriteFrames" id="preview_frames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("preview_region")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CircleShape2D" id="cuache_shape"]
 radius = 27.0
 
-[node name="Cuache" type="CharacterBody2D"]
-collision_layer = 1
+[node name="Cuache" type="CharacterBody2D" unique_id=971021862]
 collision_mask = 2
 script = ExtResource("1")
 
-[node name="Sombra" type="Polygon2D" parent="."]
+[node name="Sombra" type="Polygon2D" parent="." unique_id=745594469]
 color = Color(0.13, 0.09, 0.06, 0.38)
 polygon = PackedVector2Array(-34, 25, 34, 25, 28, 36, -28, 36)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1110364696]
 scale = Vector2(0.19, 0.19)
+sprite_frames = SubResource("preview_frames")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=717760414]
+position = Vector2(4, 8)
 shape = SubResource("cuache_shape")

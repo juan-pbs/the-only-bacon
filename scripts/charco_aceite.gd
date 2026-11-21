@@ -1,7 +1,7 @@
 extends Area2D
 
 const ATLAS := preload("res://assets/sprites/objetos-escenario.png")
-var lifetime := 3.0
+@export var lifetime := 3.0
 
 
 func _ready() -> void:
@@ -9,6 +9,11 @@ func _ready() -> void:
 	collision_layer = 0
 	collision_mask = 1
 	z_index = -1
+	if get_child_count() > 0:
+		body_entered.connect(_on_body_entered)
+		body_exited.connect(_on_body_exited)
+		tree_exiting.connect(_on_tree_exiting)
+		return
 	var sprite := Sprite2D.new()
 	var texture := AtlasTexture.new()
 	texture.atlas = ATLAS

@@ -1,6 +1,19 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/enemigo.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/acciones/tlacua-direcciones.png" id="preview"]
+
+[sub_resource type="AtlasTexture" id="preview_region"]
+atlas = ExtResource("preview")
+region = Rect2(0, 0, 458, 448)
+
+[sub_resource type="SpriteFrames" id="preview_frames"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("preview_region")}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CircleShape2D" id="body_shape"]
 radius = 24.0
@@ -34,6 +47,7 @@ color = Color(0.1, 0.07, 0.055, 0.36)
 polygon = PackedVector2Array(-35, 37, 35, 37, 29, 46, -29, 46)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("preview_frames")
 scale = Vector2(0.3, 0.3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

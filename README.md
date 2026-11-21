@@ -21,6 +21,10 @@ La escapatoria es un hueco estrecho y sin rótulo en la cerca: arriba en el nive
 
 En el nivel 2, el mapa se revela al explorar. En el nivel 3, Tocino lleva un cerillo encendido: solo se ilumina su entorno actual y lo recorrido vuelve a quedar oscuro.
 
+## Editar los mapas
+
+Abre `nivel_1.tscn`, `nivel_2.tscn` o `nivel_3.tscn` en el editor de Godot. Cada nivel tiene su propio árbol de nodos: `Pisos/PisoVisible` muestra el suelo, `Escenario` contiene los obstáculos, objetos, escondites y refugio, y `Limites` contiene las colisiones de los bordes. Tocino, Tlacua y Cuache están completos dentro de los niveles, con sus sprites y colisiones editables. Las escenas individuales de personajes y proyectiles también muestran sus sprites en el editor. Puedes mover o editar estos nodos directamente; el script solo controla la lógica durante la partida. La oscuridad de los niveles 2 y 3 se aplica al ejecutar el juego, así que el mapa queda visible al editarlo. Los objetos recogibles flotan y pulsan para distinguirlos; vuelven a aparecer cinco segundos después de recogerlos. El tiempo de reaparición se puede cambiar en el inspector de cada objeto.
+
 ## Ejecutar
 
 Abre `project.godot` con Godot 4.7 y ejecuta el proyecto. La escena inicial es `menu.tscn`.

@@ -1,8 +1,25 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/nivel_avanzado.gd" id="1"]
-[ext_resource type="PackedScene" path="res://tocino.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/piso.gd" id="3"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/objetos-escenario.png" id="prop_atlas"]
+[ext_resource type="Script" path="res://scripts/recogible.gd" id="pickup_script"]
+[ext_resource type="Script" path="res://scripts/charco_aceite.gd" id="oil_script"]
+[ext_resource type="Script" path="res://scripts/zona_escondite.gd" id="hide_script"]
+[ext_resource type="Script" path="res://scripts/refugio_inicial.gd" id="shelter_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/piso_nivel_2.png" id="floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tocino_animado/tiras/can_spin.png" id="can"]
+[ext_resource type="Texture2D" path="res://assets/sprites/recogibles/cacerola.png" id="pan"]
+[ext_resource type="Texture2D" path="res://assets/sprites/recogibles/mantequilla.png" id="butter"]
+[ext_resource type="Texture2D" path="res://assets/sprites/recogibles/reloj.png" id="clock"]
+
+[ext_resource type="Script" path="res://scripts/tocino.gd" id="tocino_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tocino_animado/tiras/idle_down.png" id="tocino_preview"]
+[ext_resource type="Script" path="res://scripts/enemigo.gd" id="tlacua_0_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/acciones/tlacua-direcciones.png" id="tlacua_0_preview"]
+[ext_resource type="Script" path="res://scripts/enemigo.gd" id="cuache_1_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/acciones/cuache-direcciones.png" id="cuache_1_preview"]
 
 [sub_resource type="StyleBoxFlat" id="life_background"]
 bg_color = Color(0.2, 0.085, 0.075, 1)
@@ -38,6 +55,339 @@ corner_radius_top_right = 9
 corner_radius_bottom_right = 9
 corner_radius_bottom_left = 9
 
+
+[sub_resource type="RectangleShape2D" id="shape_1"]
+size = Vector2(130, 3264)
+
+[sub_resource type="RectangleShape2D" id="shape_2"]
+size = Vector2(130, 552)
+
+[sub_resource type="RectangleShape2D" id="shape_3"]
+size = Vector2(130, 2662)
+
+[sub_resource type="RectangleShape2D" id="shape_4"]
+size = Vector2(2448, 145)
+
+[sub_resource type="RectangleShape2D" id="shape_5"]
+size = Vector2(2448, 125)
+
+[sub_resource type="AtlasTexture" id="atlas_fence"]
+atlas = ExtResource("prop_atlas")
+region = Rect2(1320, 520, 435, 350)
+
+[sub_resource type="AtlasTexture" id="atlas_crate"]
+atlas = ExtResource("prop_atlas")
+region = Rect2(45, 80, 350, 370)
+
+[sub_resource type="RectangleShape2D" id="shape_6"]
+size = Vector2(145, 150)
+
+[sub_resource type="AtlasTexture" id="atlas_eggs"]
+atlas = ExtResource("prop_atlas")
+region = Rect2(480, 65, 355, 390)
+
+[sub_resource type="RectangleShape2D" id="shape_7"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_8"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_9"]
+size = Vector2(145, 155)
+
+[sub_resource type="AtlasTexture" id="atlas_table"]
+atlas = ExtResource("prop_atlas")
+region = Rect2(460, 510, 435, 355)
+
+[sub_resource type="RectangleShape2D" id="shape_10"]
+size = Vector2(240, 90)
+
+[sub_resource type="RectangleShape2D" id="shape_11"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_12"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_13"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_14"]
+size = Vector2(240, 90)
+
+[sub_resource type="RectangleShape2D" id="shape_15"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_16"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_17"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_18"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_19"]
+size = Vector2(240, 90)
+
+[sub_resource type="RectangleShape2D" id="shape_20"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_21"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_22"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_23"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_24"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_25"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_26"]
+size = Vector2(240, 90)
+
+[sub_resource type="RectangleShape2D" id="shape_27"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_28"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_29"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_30"]
+size = Vector2(240, 90)
+
+[sub_resource type="RectangleShape2D" id="shape_31"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_32"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_33"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_34"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_35"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_36"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_37"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_38"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_39"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_40"]
+size = Vector2(240, 90)
+
+[sub_resource type="RectangleShape2D" id="shape_41"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_42"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_43"]
+size = Vector2(240, 90)
+
+[sub_resource type="RectangleShape2D" id="shape_44"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_45"]
+size = Vector2(24, 105)
+
+[sub_resource type="RectangleShape2D" id="shape_46"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_47"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_48"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_49"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_50"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_51"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_52"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_53"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_54"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_55"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_56"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_57"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_58"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_59"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_60"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_61"]
+size = Vector2(145, 155)
+
+[sub_resource type="RectangleShape2D" id="shape_62"]
+size = Vector2(145, 150)
+
+[sub_resource type="RectangleShape2D" id="shape_63"]
+size = Vector2(145, 150)
+
+[sub_resource type="AtlasTexture" id="atlas_oil"]
+atlas = ExtResource("prop_atlas")
+region = Rect2(875, 90, 435, 365)
+
+[sub_resource type="CircleShape2D" id="shape_64"]
+radius = 82
+
+[sub_resource type="CircleShape2D" id="shape_65"]
+radius = 82
+
+[sub_resource type="CircleShape2D" id="shape_66"]
+radius = 82
+
+[sub_resource type="CircleShape2D" id="shape_67"]
+radius = 28
+
+[sub_resource type="AtlasTexture" id="atlas_can"]
+atlas = ExtResource("can")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="CircleShape2D" id="shape_68"]
+radius = 28
+
+[sub_resource type="CircleShape2D" id="shape_69"]
+radius = 28
+
+[sub_resource type="CircleShape2D" id="shape_70"]
+radius = 28
+
+[sub_resource type="CircleShape2D" id="shape_71"]
+radius = 28
+
+[sub_resource type="CircleShape2D" id="shape_72"]
+radius = 95
+
+[sub_resource type="CircleShape2D" id="shape_73"]
+radius = 95
+
+[sub_resource type="CircleShape2D" id="shape_74"]
+radius = 95
+
+[sub_resource type="CircleShape2D" id="shape_75"]
+radius = 145
+
+[sub_resource type="AtlasTexture" id="tocino_preview_region"]
+atlas = ExtResource("tocino_preview")
+region = Rect2(0, 0, 320, 320)
+
+[sub_resource type="SpriteFrames" id="tocino_preview_frames"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("tocino_preview_region")}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="tocino_body_shape"]
+radius = 12.0
+
+[sub_resource type="AtlasTexture" id="tlacua_0_preview_region"]
+atlas = ExtResource("tlacua_0_preview")
+region = Rect2(0, 0, 458, 448)
+
+[sub_resource type="SpriteFrames" id="tlacua_0_preview_frames"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("tlacua_0_preview_region")}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="tlacua_0_body_shape"]
+radius = 24.0
+
+[sub_resource type="StyleBoxFlat" id="tlacua_0_health_background"]
+bg_color = Color(0.12, 0.09, 0.1, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.96, 0.81, 0.56, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="tlacua_0_health_fill"]
+bg_color = Color(0.9, 0.39, 0.22, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="AtlasTexture" id="cuache_1_preview_region"]
+atlas = ExtResource("cuache_1_preview")
+region = Rect2(0, 0, 428, 450)
+
+[sub_resource type="SpriteFrames" id="cuache_1_preview_frames"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("cuache_1_preview_region")}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="cuache_1_body_shape"]
+radius = 24.0
+
+[sub_resource type="StyleBoxFlat" id="cuache_1_health_background"]
+bg_color = Color(0.12, 0.09, 0.1, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.96, 0.81, 0.56, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="cuache_1_health_fill"]
+bg_color = Color(0.9, 0.39, 0.22, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [node name="Nivel2" type="Node2D"]
 script = ExtResource("1")
 level_number = 2
@@ -45,18 +395,50 @@ level_number = 2
 [node name="Pisos" type="Node2D" parent="."]
 z_index = -2
 script = ExtResource("3")
+columns = 24
+rows = 32
+level_number = 2
+
+[node name="PisoVisible" type="Sprite2D" parent="Pisos"]
+position = Vector2(1224, 1632)
+texture = ExtResource("floor")
 
 [node name="Escenario" type="Node2D" parent="."]
 
 [node name="Limites" type="Node2D" parent="."]
 
-[node name="Tocino" parent="." instance=ExtResource("2")]
+[node name="Tocino" type="CharacterBody2D" parent="."]
+position = Vector2(1224, 3004)
+z_index = 20
+collision_layer = 1
+collision_mask = 18
+script = ExtResource("tocino_1")
+
+
+[node name="Sombra" type="Polygon2D" parent="Tocino"]
+color = Color(0.1, 0.07, 0.055, 0.36)
+polygon = PackedVector2Array(-21, 23, 21, 23, 17, 29, -17, 29)
+
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Tocino"]
+sprite_frames = SubResource("tocino_preview_frames")
+scale = Vector2(0.25, 0.25)
+
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tocino"]
+position = Vector2(0, 12)
+shape = SubResource("tocino_body_shape")
 
 [node name="Camera2D" type="Camera2D" parent="Tocino"]
 position_smoothing_enabled = true
 position_smoothing_speed = 5.0
+limit_left = 0
+limit_top = 0
+limit_right = 2448
+limit_bottom = 3264
 
 [node name="Salida" type="Area2D" parent="."]
+position = Vector2(2378, 565)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Salida"]
 shape = SubResource("exit_shape")
@@ -188,3 +570,1322 @@ text = "Siguiente nivel"
 layout_mode = 2
 custom_minimum_size = Vector2(0, 58)
 text = "Volver al menú"
+
+[node name="ParedIzquierda" type="StaticBody2D" parent="Limites"]
+position = Vector2(65, 1632)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Limites/ParedIzquierda"]
+shape = SubResource("shape_1")
+
+[node name="ParedDerechaSuperior" type="StaticBody2D" parent="Limites"]
+position = Vector2(2383, 276)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Limites/ParedDerechaSuperior"]
+shape = SubResource("shape_2")
+
+[node name="ParedDerechaInferior" type="StaticBody2D" parent="Limites"]
+position = Vector2(2383, 1933)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Limites/ParedDerechaInferior"]
+shape = SubResource("shape_3")
+
+[node name="ParedInferior" type="StaticBody2D" parent="Limites"]
+position = Vector2(1224, 3191.5)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Limites/ParedInferior"]
+shape = SubResource("shape_4")
+
+[node name="ParedSuperior" type="StaticBody2D" parent="Limites"]
+position = Vector2(1224, 62.5)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Limites/ParedSuperior"]
+shape = SubResource("shape_5")
+
+[node name="CercaNorte_0" type="Sprite2D" parent="Escenario"]
+position = Vector2(110, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_0" type="Sprite2D" parent="Escenario"]
+position = Vector2(110, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_1" type="Sprite2D" parent="Escenario"]
+position = Vector2(320, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_1" type="Sprite2D" parent="Escenario"]
+position = Vector2(320, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_2" type="Sprite2D" parent="Escenario"]
+position = Vector2(530, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_2" type="Sprite2D" parent="Escenario"]
+position = Vector2(530, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_3" type="Sprite2D" parent="Escenario"]
+position = Vector2(740, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_3" type="Sprite2D" parent="Escenario"]
+position = Vector2(740, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_4" type="Sprite2D" parent="Escenario"]
+position = Vector2(950, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_4" type="Sprite2D" parent="Escenario"]
+position = Vector2(950, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_5" type="Sprite2D" parent="Escenario"]
+position = Vector2(1160, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_5" type="Sprite2D" parent="Escenario"]
+position = Vector2(1160, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_6" type="Sprite2D" parent="Escenario"]
+position = Vector2(1370, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_6" type="Sprite2D" parent="Escenario"]
+position = Vector2(1370, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_7" type="Sprite2D" parent="Escenario"]
+position = Vector2(1580, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_7" type="Sprite2D" parent="Escenario"]
+position = Vector2(1580, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_8" type="Sprite2D" parent="Escenario"]
+position = Vector2(1790, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_8" type="Sprite2D" parent="Escenario"]
+position = Vector2(1790, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_9" type="Sprite2D" parent="Escenario"]
+position = Vector2(2000, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_9" type="Sprite2D" parent="Escenario"]
+position = Vector2(2000, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_10" type="Sprite2D" parent="Escenario"]
+position = Vector2(2210, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_10" type="Sprite2D" parent="Escenario"]
+position = Vector2(2210, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaNorte_11" type="Sprite2D" parent="Escenario"]
+position = Vector2(2420, 45)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaSur_11" type="Sprite2D" parent="Escenario"]
+position = Vector2(2420, 3219)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.55, 0.55)
+
+[node name="CercaOeste_0_0" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 108.8)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_1" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 326.4)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_2" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 544)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_3" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 761.6)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_4" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 979.2)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_5" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 1196.8)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_6" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 1414.4)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_7" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 1632)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_8" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 1849.6)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_9" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 2067.2)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_10" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 2284.8)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_11" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 2502.4)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_12" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 2720)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_13" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 2937.6)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaOeste_0_14" type="Sprite2D" parent="Escenario"]
+position = Vector2(42, 3155.2)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.50023, 0.50023)
+rotation = 1.5708
+
+[node name="CercaEste_0_0" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 94.1667)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.43295, 0.43295)
+rotation = 1.5708
+
+[node name="CercaEste_0_1" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 282.5)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.43295, 0.43295)
+rotation = 1.5708
+
+[node name="CercaEste_0_2" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 470.833)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.43295, 0.43295)
+rotation = 1.5708
+
+[node name="CercaEste_1_0" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 677.458)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_1" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 902.375)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_2" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 1127.29)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_3" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 1352.21)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_4" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 1577.12)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_5" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 1802.04)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_6" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 2026.96)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_7" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 2251.88)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_8" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 2476.79)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_9" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 2701.71)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_10" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 2926.62)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="CercaEste_1_11" type="Sprite2D" parent="Escenario"]
+position = Vector2(2406, 3151.54)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.51705, 0.51705)
+rotation = 1.5708
+
+[node name="Obstaculo_00" type="StaticBody2D" parent="Escenario"]
+position = Vector2(540, 2707.69)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_00"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_00"]
+position = Vector2(0, -6)
+shape = SubResource("shape_6")
+
+[node name="Obstaculo_01" type="StaticBody2D" parent="Escenario"]
+position = Vector2(936, 2707.69)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_01"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_01"]
+position = Vector2(0, -6)
+shape = SubResource("shape_7")
+
+[node name="Obstaculo_02" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1476, 2707.69)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_02"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_02"]
+position = Vector2(0, -6)
+shape = SubResource("shape_8")
+
+[node name="Obstaculo_03" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1920, 2707.69)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_03"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_03"]
+position = Vector2(0, -6)
+shape = SubResource("shape_9")
+
+[node name="Obstaculo_04" type="StaticBody2D" parent="Escenario"]
+position = Vector2(624, 2387.69)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_04"]
+texture = SubResource("atlas_table")
+scale = Vector2(0.68, 0.68)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_04"]
+position = Vector2(0, -38)
+shape = SubResource("shape_10")
+
+[node name="Colision2" type="CollisionShape2D" parent="Escenario/Obstaculo_04"]
+position = Vector2(-112, 45)
+shape = SubResource("shape_11")
+
+[node name="Colision3" type="CollisionShape2D" parent="Escenario/Obstaculo_04"]
+position = Vector2(112, 45)
+shape = SubResource("shape_12")
+
+[node name="Obstaculo_05" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1224, 2387.69)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_05"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_05"]
+position = Vector2(0, -6)
+shape = SubResource("shape_13")
+
+[node name="Obstaculo_06" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1824, 2387.69)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_06"]
+texture = SubResource("atlas_table")
+scale = Vector2(0.68, 0.68)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_06"]
+position = Vector2(0, -38)
+shape = SubResource("shape_14")
+
+[node name="Colision2" type="CollisionShape2D" parent="Escenario/Obstaculo_06"]
+position = Vector2(-112, 45)
+shape = SubResource("shape_15")
+
+[node name="Colision3" type="CollisionShape2D" parent="Escenario/Obstaculo_06"]
+position = Vector2(112, 45)
+shape = SubResource("shape_16")
+
+[node name="Obstaculo_07" type="StaticBody2D" parent="Escenario"]
+position = Vector2(480, 2080)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_07"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_07"]
+position = Vector2(0, -6)
+shape = SubResource("shape_17")
+
+[node name="Obstaculo_08" type="StaticBody2D" parent="Escenario"]
+position = Vector2(912, 2067.69)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_08"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_08"]
+position = Vector2(0, -6)
+shape = SubResource("shape_18")
+
+[node name="Obstaculo_09" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1752, 2080)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_09"]
+texture = SubResource("atlas_table")
+scale = Vector2(0.68, 0.68)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_09"]
+position = Vector2(0, -38)
+shape = SubResource("shape_19")
+
+[node name="Colision2" type="CollisionShape2D" parent="Escenario/Obstaculo_09"]
+position = Vector2(-112, 45)
+shape = SubResource("shape_20")
+
+[node name="Colision3" type="CollisionShape2D" parent="Escenario/Obstaculo_09"]
+position = Vector2(112, 45)
+shape = SubResource("shape_21")
+
+[node name="Obstaculo_10" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2148, 2067.69)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_10"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_10"]
+position = Vector2(0, -6)
+shape = SubResource("shape_22")
+
+[node name="Obstaculo_11" type="StaticBody2D" parent="Escenario"]
+position = Vector2(744, 1760)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_11"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_11"]
+position = Vector2(0, -6)
+shape = SubResource("shape_23")
+
+[node name="Obstaculo_12" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1392, 1760)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_12"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_12"]
+position = Vector2(0, -6)
+shape = SubResource("shape_24")
+
+[node name="Obstaculo_13" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1884, 1772.31)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_13"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_13"]
+position = Vector2(0, -6)
+shape = SubResource("shape_25")
+
+[node name="Obstaculo_14" type="StaticBody2D" parent="Escenario"]
+position = Vector2(576, 1452.31)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_14"]
+texture = SubResource("atlas_table")
+scale = Vector2(0.68, 0.68)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_14"]
+position = Vector2(0, -38)
+shape = SubResource("shape_26")
+
+[node name="Colision2" type="CollisionShape2D" parent="Escenario/Obstaculo_14"]
+position = Vector2(-112, 45)
+shape = SubResource("shape_27")
+
+[node name="Colision3" type="CollisionShape2D" parent="Escenario/Obstaculo_14"]
+position = Vector2(112, 45)
+shape = SubResource("shape_28")
+
+[node name="Obstaculo_15" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1212, 1464.62)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_15"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_15"]
+position = Vector2(0, -6)
+shape = SubResource("shape_29")
+
+[node name="Obstaculo_16" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1860, 1452.31)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_16"]
+texture = SubResource("atlas_table")
+scale = Vector2(0.68, 0.68)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_16"]
+position = Vector2(0, -38)
+shape = SubResource("shape_30")
+
+[node name="Colision2" type="CollisionShape2D" parent="Escenario/Obstaculo_16"]
+position = Vector2(-112, 45)
+shape = SubResource("shape_31")
+
+[node name="Colision3" type="CollisionShape2D" parent="Escenario/Obstaculo_16"]
+position = Vector2(112, 45)
+shape = SubResource("shape_32")
+
+[node name="Obstaculo_17" type="StaticBody2D" parent="Escenario"]
+position = Vector2(696, 1132.31)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_17"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_17"]
+position = Vector2(0, -6)
+shape = SubResource("shape_33")
+
+[node name="Obstaculo_18" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1320, 1132.31)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_18"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_18"]
+position = Vector2(0, -6)
+shape = SubResource("shape_34")
+
+[node name="Obstaculo_19" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1944, 1132.31)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_19"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_19"]
+position = Vector2(0, -6)
+shape = SubResource("shape_35")
+
+[node name="Obstaculo_20" type="StaticBody2D" parent="Escenario"]
+position = Vector2(480, 824.615)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_20"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_20"]
+position = Vector2(0, -6)
+shape = SubResource("shape_36")
+
+[node name="Obstaculo_21" type="StaticBody2D" parent="Escenario"]
+position = Vector2(960, 812.308)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_21"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_21"]
+position = Vector2(0, -6)
+shape = SubResource("shape_37")
+
+[node name="Obstaculo_22" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1692, 812.308)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_22"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_22"]
+position = Vector2(0, -6)
+shape = SubResource("shape_38")
+
+[node name="Obstaculo_23" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2172, 824.615)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_23"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_23"]
+position = Vector2(0, -6)
+shape = SubResource("shape_39")
+
+[node name="Obstaculo_24" type="StaticBody2D" parent="Escenario"]
+position = Vector2(600, 516.923)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_24"]
+texture = SubResource("atlas_table")
+scale = Vector2(0.68, 0.68)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_24"]
+position = Vector2(0, -38)
+shape = SubResource("shape_40")
+
+[node name="Colision2" type="CollisionShape2D" parent="Escenario/Obstaculo_24"]
+position = Vector2(-112, 45)
+shape = SubResource("shape_41")
+
+[node name="Colision3" type="CollisionShape2D" parent="Escenario/Obstaculo_24"]
+position = Vector2(112, 45)
+shape = SubResource("shape_42")
+
+[node name="Obstaculo_25" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1860, 516.923)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_25"]
+texture = SubResource("atlas_table")
+scale = Vector2(0.68, 0.68)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_25"]
+position = Vector2(0, -38)
+shape = SubResource("shape_43")
+
+[node name="Colision2" type="CollisionShape2D" parent="Escenario/Obstaculo_25"]
+position = Vector2(-112, 45)
+shape = SubResource("shape_44")
+
+[node name="Colision3" type="CollisionShape2D" parent="Escenario/Obstaculo_25"]
+position = Vector2(112, 45)
+shape = SubResource("shape_45")
+
+[node name="Obstaculo_26" type="StaticBody2D" parent="Escenario"]
+position = Vector2(312, 2917.08)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_26"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_26"]
+position = Vector2(0, -6)
+shape = SubResource("shape_46")
+
+[node name="Obstaculo_27" type="StaticBody2D" parent="Escenario"]
+position = Vector2(954, 2953.54)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_27"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_27"]
+position = Vector2(0, -6)
+shape = SubResource("shape_47")
+
+[node name="Obstaculo_28" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2050, 2917.08)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_28"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_28"]
+position = Vector2(0, -6)
+shape = SubResource("shape_48")
+
+[node name="Obstaculo_29" type="StaticBody2D" parent="Escenario"]
+position = Vector2(288, 2560)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_29"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_29"]
+position = Vector2(0, -6)
+shape = SubResource("shape_49")
+
+[node name="Obstaculo_30" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2136, 2560)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_30"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_30"]
+position = Vector2(0, -6)
+shape = SubResource("shape_50")
+
+[node name="Obstaculo_31" type="StaticBody2D" parent="Escenario"]
+position = Vector2(324, 2326)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_31"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_31"]
+position = Vector2(0, -6)
+shape = SubResource("shape_51")
+
+[node name="Obstaculo_32" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2136, 2252.31)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_32"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_32"]
+position = Vector2(0, -6)
+shape = SubResource("shape_52")
+
+[node name="Obstaculo_33" type="StaticBody2D" parent="Escenario"]
+position = Vector2(250, 1821.69)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_33"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_33"]
+position = Vector2(0, -6)
+shape = SubResource("shape_53")
+
+[node name="Obstaculo_34" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2136, 1821.69)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_34"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_34"]
+position = Vector2(0, -6)
+shape = SubResource("shape_54")
+
+[node name="Obstaculo_35" type="StaticBody2D" parent="Escenario"]
+position = Vector2(348, 1587.69)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_35"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_35"]
+position = Vector2(0, -6)
+shape = SubResource("shape_55")
+
+[node name="Obstaculo_36" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2124, 1575.38)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_36"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_36"]
+position = Vector2(0, -6)
+shape = SubResource("shape_56")
+
+[node name="Obstaculo_37" type="StaticBody2D" parent="Escenario"]
+position = Vector2(324, 1292.31)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_37"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_37"]
+position = Vector2(0, -6)
+shape = SubResource("shape_57")
+
+[node name="Obstaculo_38" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2136, 1280)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_38"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_38"]
+position = Vector2(0, -6)
+shape = SubResource("shape_58")
+
+[node name="Obstaculo_39" type="StaticBody2D" parent="Escenario"]
+position = Vector2(312, 1058.31)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_39"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_39"]
+position = Vector2(0, -6)
+shape = SubResource("shape_59")
+
+[node name="Obstaculo_40" type="StaticBody2D" parent="Escenario"]
+position = Vector2(2136, 1058.31)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_40"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_40"]
+position = Vector2(0, -6)
+shape = SubResource("shape_60")
+
+[node name="Obstaculo_41" type="StaticBody2D" parent="Escenario"]
+position = Vector2(262, 566.308)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_41"]
+texture = SubResource("atlas_eggs")
+scale = Vector2(0.47, 0.47)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_41"]
+position = Vector2(0, -6)
+shape = SubResource("shape_61")
+
+[node name="Obstaculo_42" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1964, 738.308)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_42"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_42"]
+position = Vector2(0, -6)
+shape = SubResource("shape_62")
+
+[node name="Obstaculo_43" type="StaticBody2D" parent="Escenario"]
+position = Vector2(1212, 467.692)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Obstaculo_43"]
+texture = SubResource("atlas_crate")
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision1" type="CollisionShape2D" parent="Escenario/Obstaculo_43"]
+position = Vector2(0, -6)
+shape = SubResource("shape_63")
+
+[node name="Aceite_0" type="Area2D" parent="Escenario"]
+position = Vector2(1212, 2178.46)
+script = ExtResource("oil_script")
+lifetime = 25.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Aceite_0"]
+texture = SubResource("atlas_oil")
+scale = Vector2(0.48, 0.48)
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Aceite_0"]
+shape = SubResource("shape_64")
+
+[node name="Aceite_1" type="Area2D" parent="Escenario"]
+position = Vector2(1558, 1194)
+script = ExtResource("oil_script")
+lifetime = 25.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Aceite_1"]
+texture = SubResource("atlas_oil")
+scale = Vector2(0.48, 0.48)
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Aceite_1"]
+shape = SubResource("shape_65")
+
+[node name="Aceite_2" type="Area2D" parent="Escenario"]
+position = Vector2(888, 541.692)
+script = ExtResource("oil_script")
+lifetime = 25.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Aceite_2"]
+texture = SubResource("atlas_oil")
+scale = Vector2(0.48, 0.48)
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Aceite_2"]
+shape = SubResource("shape_66")
+
+[node name="Can_0" type="Area2D" parent="Escenario"]
+position = Vector2(966, 2511.23)
+script = ExtResource("pickup_script")
+kind = "can"
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Can_0"]
+shape = SubResource("shape_67")
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Can_0"]
+texture = SubResource("atlas_can")
+scale = Vector2(0.42, 0.42)
+
+[node name="Etiqueta" type="Label" parent="Escenario/Can_0"]
+offset_left = -55.0
+offset_top = -58.0
+offset_right = 55.0
+offset_bottom = -36.0
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 15
+text = "LATA"
+
+[node name="Pan_1" type="Area2D" parent="Escenario"]
+position = Vector2(744, 2043.08)
+script = ExtResource("pickup_script")
+kind = "pan"
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Pan_1"]
+shape = SubResource("shape_68")
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Pan_1"]
+texture = ExtResource("pan")
+scale = Vector2(0.07, 0.07)
+
+[node name="Etiqueta" type="Label" parent="Escenario/Pan_1"]
+offset_left = -55.0
+offset_top = -58.0
+offset_right = 55.0
+offset_bottom = -36.0
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 15
+text = "CACEROLA"
+
+[node name="Can_2" type="Area2D" parent="Escenario"]
+position = Vector2(1654, 1255.54)
+script = ExtResource("pickup_script")
+kind = "can"
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Can_2"]
+shape = SubResource("shape_69")
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Can_2"]
+texture = SubResource("atlas_can")
+scale = Vector2(0.42, 0.42)
+
+[node name="Etiqueta" type="Label" parent="Escenario/Can_2"]
+offset_left = -55.0
+offset_top = -58.0
+offset_right = 55.0
+offset_bottom = -36.0
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 15
+text = "LATA"
+
+[node name="Butter_3" type="Area2D" parent="Escenario"]
+position = Vector2(516, 1698.15)
+script = ExtResource("pickup_script")
+kind = "butter"
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Butter_3"]
+shape = SubResource("shape_70")
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Butter_3"]
+texture = ExtResource("butter")
+scale = Vector2(0.1, 0.1)
+
+[node name="Etiqueta" type="Label" parent="Escenario/Butter_3"]
+offset_left = -55.0
+offset_top = -58.0
+offset_right = 55.0
+offset_bottom = -36.0
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 15
+text = "+25 VIDA"
+
+[node name="Clock_4" type="Area2D" parent="Escenario"]
+position = Vector2(1452, 713.846)
+script = ExtResource("pickup_script")
+kind = "clock"
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Clock_4"]
+shape = SubResource("shape_71")
+
+[node name="Sprite2D" type="Sprite2D" parent="Escenario/Clock_4"]
+texture = ExtResource("clock")
+scale = Vector2(0.075, 0.075)
+
+[node name="Etiqueta" type="Label" parent="Escenario/Clock_4"]
+offset_left = -55.0
+offset_top = -58.0
+offset_right = 55.0
+offset_bottom = -36.0
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 15
+text = "+10 s"
+
+[node name="Escondite_0" type="Area2D" parent="Escenario"]
+position = Vector2(724, 2633.69)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("hide_script")
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Escondite_0"]
+shape = SubResource("shape_72")
+
+[node name="Escondite_1" type="Area2D" parent="Escenario"]
+position = Vector2(1664, 1748)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("hide_script")
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Escondite_1"]
+shape = SubResource("shape_73")
+
+[node name="Escondite_2" type="Area2D" parent="Escenario"]
+position = Vector2(684, 910.769)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("hide_script")
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/Escondite_2"]
+shape = SubResource("shape_74")
+
+[node name="RefugioInicial" type="Area2D" parent="Escenario"]
+position = Vector2(1224, 3004)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("shelter_script")
+
+[node name="Colision" type="CollisionShape2D" parent="Escenario/RefugioInicial"]
+shape = SubResource("shape_75")
+
+[node name="Cerca" type="Sprite2D" parent="Escenario/RefugioInicial"]
+position = Vector2(0, 75)
+texture = SubResource("atlas_fence")
+scale = Vector2(0.48, 0.25)
+
+[node name="CajaIzquierda" type="Sprite2D" parent="Escenario/RefugioInicial"]
+position = Vector2(-100, 23)
+texture = SubResource("atlas_crate")
+scale = Vector2(0.3, 0.3)
+z_index = 2
+
+[node name="CajaDerecha" type="Sprite2D" parent="Escenario/RefugioInicial"]
+position = Vector2(100, 23)
+texture = SubResource("atlas_crate")
+scale = Vector2(0.3, 0.3)
+z_index = 2
+
+[node name="Etiqueta" type="Label" parent="Escenario/RefugioInicial"]
+offset_left = -66.0
+offset_top = -101.0
+offset_right = 68.0
+offset_bottom = -75.0
+text = "REFUGIO"
+theme_override_font_sizes/font_size = 17
+
+[node name="Tlacua_0" type="CharacterBody2D" parent="."]
+position = Vector2(1224, 2674)
+collision_layer = 4
+collision_mask = 18
+script = ExtResource("tlacua_0_1")
+
+
+[node name="Sombra" type="Polygon2D" parent="Tlacua_0"]
+color = Color(0.1, 0.07, 0.055, 0.36)
+polygon = PackedVector2Array(-35, 37, 35, 37, 29, 46, -29, 46)
+
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Tlacua_0"]
+sprite_frames = SubResource("tlacua_0_preview_frames")
+scale = Vector2(0.3, 0.3)
+
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tlacua_0"]
+position = Vector2(0, 28)
+shape = SubResource("tlacua_0_body_shape")
+
+
+[node name="Nombre" type="Label" parent="Tlacua_0"]
+z_index = 10
+offset_left = -82.0
+offset_top = -139.0
+offset_right = 82.0
+offset_bottom = -116.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+text = "TLACUA"
+
+
+[node name="VidaBarra" type="ProgressBar" parent="Tlacua_0"]
+z_index = 10
+offset_left = -82.0
+offset_top = -113.0
+offset_right = 82.0
+offset_bottom = -95.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("tlacua_0_health_background")
+theme_override_styles/fill = SubResource("tlacua_0_health_fill")
+max_value = 400.0
+value = 400.0
+show_percentage = false
+
+
+[node name="Marca1" type="ColorRect" parent="Tlacua_0/VidaBarra"]
+offset_left = 40.0
+offset_top = 3.0
+offset_right = 42.0
+offset_bottom = 15.0
+mouse_filter = 2
+color = Color(0.12, 0.09, 0.1, 0.62)
+
+
+[node name="Marca2" type="ColorRect" parent="Tlacua_0/VidaBarra"]
+offset_left = 81.0
+offset_top = 3.0
+offset_right = 83.0
+offset_bottom = 15.0
+mouse_filter = 2
+color = Color(0.12, 0.09, 0.1, 0.62)
+
+
+[node name="Marca3" type="ColorRect" parent="Tlacua_0/VidaBarra"]
+offset_left = 122.0
+offset_top = 3.0
+offset_right = 124.0
+offset_bottom = 15.0
+mouse_filter = 2
+color = Color(0.12, 0.09, 0.1, 0.62)
+
+[node name="Cuache_1" type="CharacterBody2D" parent="."]
+position = Vector2(2253, 565)
+collision_layer = 4
+collision_mask = 18
+script = ExtResource("cuache_1_1")
+kind = "cuache"
+
+
+[node name="Sombra" type="Polygon2D" parent="Cuache_1"]
+color = Color(0.1, 0.07, 0.055, 0.36)
+polygon = PackedVector2Array(-35, 37, 35, 37, 29, 46, -29, 46)
+
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Cuache_1"]
+sprite_frames = SubResource("cuache_1_preview_frames")
+scale = Vector2(0.3, 0.3)
+
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cuache_1"]
+position = Vector2(0, 28)
+shape = SubResource("cuache_1_body_shape")
+
+
+[node name="Nombre" type="Label" parent="Cuache_1"]
+z_index = 10
+offset_left = -82.0
+offset_top = -139.0
+offset_right = 82.0
+offset_bottom = -116.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+text = "CUACHE"
+
+
+[node name="VidaBarra" type="ProgressBar" parent="Cuache_1"]
+z_index = 10
+offset_left = -82.0
+offset_top = -113.0
+offset_right = 82.0
+offset_bottom = -95.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("cuache_1_health_background")
+theme_override_styles/fill = SubResource("cuache_1_health_fill")
+max_value = 400.0
+value = 400.0
+show_percentage = false
+
+
+[node name="Marca1" type="ColorRect" parent="Cuache_1/VidaBarra"]
+offset_left = 40.0
+offset_top = 3.0
+offset_right = 42.0
+offset_bottom = 15.0
+mouse_filter = 2
+color = Color(0.12, 0.09, 0.1, 0.62)
+
+
+[node name="Marca2" type="ColorRect" parent="Cuache_1/VidaBarra"]
+offset_left = 81.0
+offset_top = 3.0
+offset_right = 83.0
+offset_bottom = 15.0
+mouse_filter = 2
+color = Color(0.12, 0.09, 0.1, 0.62)
+
+
+[node name="Marca3" type="ColorRect" parent="Cuache_1/VidaBarra"]
+offset_left = 122.0
+offset_top = 3.0
+offset_right = 124.0
+offset_bottom = 15.0
+mouse_filter = 2
+color = Color(0.12, 0.09, 0.1, 0.62)
